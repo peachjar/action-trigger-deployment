@@ -20,4 +20,6 @@ jobs:
     - uses: actions/checkout@v1
     - uses: ./
       with: 
-        milliseconds: 1000
+        token: ${{ secrets.GITHUB_TOKEN }}
+        environment: staging
+        description: Deploy on successful push to master
