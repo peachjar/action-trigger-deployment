@@ -1,10 +1,21 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Trigger Deployment'
+description: 'Trigger a deployment of a service'
+author: 'Peachjar Engineering'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  token:
+    required: true
+    description: Github token used to create the deployment.
+  environment:
+    required: true
+    description: The environment you want to deploy to.
+  requiredContexts:
+    required: false
+    description: 'The build steps that should have passed.'
+    default: 'build,build-migrations'
+  description:
+    required: false
+    description: 'An optional description of why the deploy is being triggered'
+    default: 'Deployed as a result of a code change'
 runs:
   using: 'node12'
   main: 'dist/index.js'
