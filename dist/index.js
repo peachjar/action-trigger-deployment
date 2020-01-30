@@ -23193,9 +23193,10 @@ function run(context, GitHub, core) {
         try {
             const token = core.getInput('token', { required: true });
             const environment = core.getInput('environment', { required: true });
-            const required_contexts = (core.getInput('requiredContexts') || 'build,build-migrations')
+            const required_contexts = (core.getInput('requiredContexts') || '')
                 .split(',')
-                .map(rc => rc.trim());
+                .map(rc => rc.trim())
+                .filter(Boolean);
             const description = core.getInput('description') || 'Deployed as a result of a code change';
             const octokit = new GitHub(token);
             const deployment = yield octokit.repos.createDeployment(Object.assign({

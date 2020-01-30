@@ -10,8 +10,8 @@ inputs:
     description: The environment you want to deploy to.
   requiredContexts:
     required: false
-    description: 'The build steps that should have passed.'
-    default: 'build,build-migrations'
+    description: 'The build steps that should have passed (default: none)'
+    default: ''
   description:
     required: false
     description: 'An optional description of why the deploy is being triggered'
