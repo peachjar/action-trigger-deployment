@@ -20,6 +20,9 @@ inputs:
     required: false
     description: The github repository (owner/repo) that is being deployed
     default: ${{ github.repository }}
+  payload:
+    required: false
+    description: Additional metadata to include on the deployment
 runs:
   using: 'node12'
   main: 'dist/index.js'

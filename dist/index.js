@@ -23208,13 +23208,18 @@ function run(context, GitHub, core) {
                     repo,
                 };
             }
+            // If provided, parse provided JSON payload metadata
+            const payloadParam = core.getInput('payload');
+            const payload = payloadParam !== '' ?
+                { payload: JSON.parse(payloadParam) } :
+                null;
             const octokit = new GitHub(token);
             const deployment = yield octokit.repos.createDeployment(Object.assign({
                 ref: context.ref,
                 environment,
                 required_contexts,
                 description
-            }, deployRepo));
+            }, deployRepo, payload));
             core.info(`Deployment created: ${deployment.data.id}`);
             core.setOutput('deployment_id', `${deployment.data.id}`);
         }

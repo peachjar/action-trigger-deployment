@@ -41,6 +41,12 @@ export default async function run(
             }
         }
 
+        // If provided, parse provided JSON payload metadata
+        const payloadParam = core.getInput('payload')
+        const payload = payloadParam !== '' ?
+            { payload: JSON.parse(payloadParam) } :
+            null
+
         const octokit = new GitHub(token)
 
         const deployment = await octokit.repos.createDeployment(
@@ -52,6 +58,7 @@ export default async function run(
                     description
                 },
                 deployRepo,
+                payload,
             )
         )
 
