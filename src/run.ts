@@ -47,12 +47,17 @@ export default async function run(
             { payload: JSON.parse(payloadParam) } :
             null
 
+        const refParam = core.getInput('ref')
+        const ref = refParam !== '' ?
+          refParam :
+          context.ref
+
         const octokit = new GitHub(token)
 
         const deployment = await octokit.repos.createDeployment(
             Object.assign(
                 {
-                    ref: context.ref,
+                    ref,
                     environment,
                     required_contexts,
                     description

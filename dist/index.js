@@ -23213,9 +23213,13 @@ function run(context, GitHub, core) {
             const payload = payloadParam !== '' ?
                 { payload: JSON.parse(payloadParam) } :
                 null;
+            const refParam = core.getInput('ref');
+            const ref = refParam !== '' ?
+                refParam :
+                context.ref;
             const octokit = new GitHub(token);
             const deployment = yield octokit.repos.createDeployment(Object.assign({
-                ref: context.ref,
+                ref,
                 environment,
                 required_contexts,
                 description
