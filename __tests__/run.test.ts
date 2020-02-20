@@ -46,6 +46,13 @@ describe('Run function', () => {
                         return 'build,build-migrations'
                     case 'description':
                         return 'Deployed as a result of a code change'
+                    case 'repository':
+                        // '' = optional property not set
+                        return ''
+                    case 'payload':
+                        return ''
+                    case 'ref':
+                        return ''
                     default:
                         throw Error('Unknown property being accessed')
                 }
@@ -84,6 +91,13 @@ describe('Run function', () => {
                             return ''
                         case 'description':
                             return 'Deployed as a result of a code change'
+                        case 'repository':
+                            // '' = optional property not set
+                            return ''
+                        case 'payload':
+                            return ''
+                        case 'ref':
+                            return ''
                         default:
                             throw Error('Unknown property being accessed')
                     }
@@ -92,6 +106,7 @@ describe('Run function', () => {
 
             it('should use an empty array if required_contexts are not wanted', async () => {
                 await run(context, GitHub, core)
+
                 expect(createDeploymentMock).toHaveBeenCalledWith({
                     owner: 'peachjar',
                     repo: 'foobaz',
@@ -104,6 +119,129 @@ describe('Run function', () => {
                 expect(core.setFailed).not.toHaveBeenCalled()
                 expect(core.setOutput).toHaveBeenCalledWith('deployment_id', '1234567890')
             })
+        })
+
+        describe('when repository parameter is provided', () => {
+            beforeEach(() => {
+                core.getInput = jest.fn((key: string) => {
+                    switch (key) {
+                        case 'token':
+                            return 'footoken'
+                        case 'environment':
+                            return 'staging'
+                        case 'requiredContexts':
+                            return 'build,build-migrations'
+                        case 'description':
+                            return 'Deployed as a result of a code change'
+                        case 'repository':
+                            return '3rdparty/some-external-repo'
+                        case 'payload':
+                            return ''
+                        case 'ref':
+                            return ''
+                        default:
+                            throw Error('Unknown property being accessed')
+                    }
+                })
+            })
+
+            it('should call Github to create a deployment object', async () => {
+                await run(context, GitHub, core)
+                expect(createDeploymentMock).toHaveBeenCalledWith({
+                    owner: '3rdparty',
+                    repo: 'some-external-repo',
+                    ref: 'abcdef1',
+                    environment: 'staging',
+                    required_contexts: ['build', 'build-migrations'],
+                    description: 'Deployed as a result of a code change'
+                })
+                expect(core.info).toHaveBeenCalled()
+                expect(core.setFailed).not.toHaveBeenCalled()
+                expect(core.setOutput).toHaveBeenCalledWith('deployment_id', '1234567890')
+            })
+
+        })
+
+        describe('when payload parameter is provided', () => {
+            beforeEach(() => {
+                core.getInput = jest.fn((key: string) => {
+                    switch (key) {
+                        case 'token':
+                            return 'footoken'
+                        case 'environment':
+                            return 'staging'
+                        case 'requiredContexts':
+                            return 'build,build-migrations'
+                        case 'description':
+                            return 'Deployed as a result of a code change'
+                        case 'repository':
+                            return ''
+                        case 'payload':
+                            return '{"hello": "world"}'
+                        case 'ref':
+                            return ''
+                        default:
+                            throw Error('Unknown property being accessed')
+                    }
+                })
+            })
+
+            it('should call Github to create a deployment object', async () => {
+                await run(context, GitHub, core)
+                expect(createDeploymentMock).toHaveBeenCalledWith({
+                    owner: 'peachjar',
+                    repo: 'foobaz',
+                    ref: 'abcdef1',
+                    environment: 'staging',
+                    required_contexts: ['build', 'build-migrations'],
+                    description: 'Deployed as a result of a code change',
+                    payload: { hello: 'world' },
+                })
+                expect(core.info).toHaveBeenCalled()
+                expect(core.setFailed).not.toHaveBeenCalled()
+                expect(core.setOutput).toHaveBeenCalledWith('deployment_id', '1234567890')
+            })
+        })
+
+        describe('when ref parameter is provided', () => {
+            beforeEach(() => {
+                core.getInput = jest.fn((key: string) => {
+                    switch (key) {
+                        case 'token':
+                            return 'footoken'
+                        case 'environment':
+                            return 'staging'
+                        case 'requiredContexts':
+                            return 'build,build-migrations'
+                        case 'description':
+                            return 'Deployed as a result of a code change'
+                        case 'repository':
+                            return ''
+                        case 'payload':
+                            return ''
+                        case 'ref':
+                            return 'master'
+                        default:
+                            throw Error('Unknown property being accessed')
+                    }
+                })
+            })
+
+            it('should call Github to create a deployment object', async () => {
+                await run(context, GitHub, core)
+                expect(createDeploymentMock).toHaveBeenCalledWith({
+                    owner: 'peachjar',
+                    repo: 'foobaz',
+                    ref: 'master',
+                    environment: 'staging',
+                    required_contexts: ['build', 'build-migrations'],
+                    description: 'Deployed as a result of a code change',
+                })
+                expect(core.info).toHaveBeenCalled()
+                expect(core.setFailed).not.toHaveBeenCalled()
+                expect(core.setOutput).toHaveBeenCalledWith('deployment_id', '1234567890')
+            })
+
         })
     })
 

@@ -1,6 +1,11 @@
 import { GitHub } from '@actions/github'
 import { Context } from '@actions/github/lib/context'
 
+interface GitHubRepository {
+    owner: string,
+    repo: string,
+}
+
 export default async function run(
     context: Context,
     GitHub: { new(token: string): GitHub },
@@ -25,17 +30,40 @@ export default async function run(
         const description =
             core.getInput('description') || 'Deployed as a result of a code change'
 
+        // Default to current repo, but if provided, trigger deployment on another
+        let deployRepo: GitHubRepository = context.repo
+        const deployRepoParam = core.getInput('repository')
+        if (deployRepoParam !== '') {
+            const [ owner, repo ] = deployRepoParam.split('/')
+            deployRepo = {
+                owner,
+                repo,
+            }
+        }
+
+        // If provided, parse provided JSON payload metadata
+        const payloadParam = core.getInput('payload')
+        const payload = payloadParam !== '' ?
+            { payload: JSON.parse(payloadParam) } :
+            null
+
+        const refParam = core.getInput('ref')
+        const ref = refParam !== '' ?
+          refParam :
+          context.ref
+
         const octokit = new GitHub(token)
 
         const deployment = await octokit.repos.createDeployment(
             Object.assign(
                 {
-                    ref: context.ref,
+                    ref,
                     environment,
                     required_contexts,
                     description
                 },
-                context.repo
+                deployRepo,
+                payload,
             )
         )
 
