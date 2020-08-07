@@ -27,6 +27,10 @@ inputs:
   payload:
     required: false
     description: Additional metadata to include on the deployment
+  autoMerge:
+    required: false
+    default: false
+    description: Ensure that master merges cleanly into deploy (see Github Deployment API)
 runs:
   using: 'node12'
   main: 'dist/index.js'

@@ -53,6 +53,8 @@ describe('Run function', () => {
                         return ''
                     case 'ref':
                         return ''
+                    case 'autoMerge':
+                        return 'false'
                     default:
                         throw Error('Unknown property being accessed')
                 }
@@ -70,6 +72,7 @@ describe('Run function', () => {
                 owner: 'peachjar',
                 repo: 'foobaz',
                 ref: 'abcdef1',
+                auto_merge: false,
                 environment: 'staging',
                 required_contexts: ['build', 'build-migrations'],
                 description: 'Deployed as a result of a code change'
@@ -98,6 +101,8 @@ describe('Run function', () => {
                             return ''
                         case 'ref':
                             return ''
+                        case 'autoMerge':
+                            return 'false'
                         default:
                             throw Error('Unknown property being accessed')
                     }
@@ -111,6 +116,7 @@ describe('Run function', () => {
                     owner: 'peachjar',
                     repo: 'foobaz',
                     ref: 'abcdef1',
+                    auto_merge: false,
                     environment: 'staging',
                     required_contexts: [],
                     description: 'Deployed as a result of a code change'
@@ -139,6 +145,8 @@ describe('Run function', () => {
                             return ''
                         case 'ref':
                             return ''
+                        case 'autoMerge':
+                            return 'false'
                         default:
                             throw Error('Unknown property being accessed')
                     }
@@ -151,6 +159,7 @@ describe('Run function', () => {
                     owner: '3rdparty',
                     repo: 'some-external-repo',
                     ref: 'abcdef1',
+                    auto_merge: false,
                     environment: 'staging',
                     required_contexts: ['build', 'build-migrations'],
                     description: 'Deployed as a result of a code change'
@@ -180,6 +189,8 @@ describe('Run function', () => {
                             return '{"hello": "world"}'
                         case 'ref':
                             return ''
+                        case 'autoMerge':
+                            return 'false'
                         default:
                             throw Error('Unknown property being accessed')
                     }
@@ -192,6 +203,7 @@ describe('Run function', () => {
                     owner: 'peachjar',
                     repo: 'foobaz',
                     ref: 'abcdef1',
+                    auto_merge: false,
                     environment: 'staging',
                     required_contexts: ['build', 'build-migrations'],
                     description: 'Deployed as a result of a code change',
@@ -221,6 +233,8 @@ describe('Run function', () => {
                             return ''
                         case 'ref':
                             return 'master'
+                        case 'autoMerge':
+                            return 'false'
                         default:
                             throw Error('Unknown property being accessed')
                     }
@@ -233,6 +247,7 @@ describe('Run function', () => {
                     owner: 'peachjar',
                     repo: 'foobaz',
                     ref: 'master',
+                    auto_merge: false,
                     environment: 'staging',
                     required_contexts: ['build', 'build-migrations'],
                     description: 'Deployed as a result of a code change',
@@ -258,6 +273,7 @@ describe('Run function', () => {
                 owner: 'peachjar',
                 repo: 'foobaz',
                 ref: 'abcdef1',
+                auto_merge: false,
                 environment: 'staging',
                 required_contexts: ['build', 'build-migrations'],
                 description: 'Deployed as a result of a code change'

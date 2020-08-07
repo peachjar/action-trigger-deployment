@@ -52,12 +52,15 @@ export default async function run(
           refParam :
           context.ref
 
+        const auto_merge = core.getInput('autoMerge') === 'true'
+
         const octokit = new GitHub(token)
 
         const deployment = await octokit.repos.createDeployment(
             Object.assign(
                 {
                     ref,
+                    auto_merge,
                     environment,
                     required_contexts,
                     description
