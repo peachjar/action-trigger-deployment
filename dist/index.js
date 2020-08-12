@@ -23217,9 +23217,11 @@ function run(context, GitHub, core) {
             const ref = refParam !== '' ?
                 refParam :
                 context.ref;
+            const auto_merge = core.getInput('autoMerge') === 'true';
             const octokit = new GitHub(token);
             const deployment = yield octokit.repos.createDeployment(Object.assign({
                 ref,
+                auto_merge,
                 environment,
                 required_contexts,
                 description
